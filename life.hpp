@@ -24,8 +24,10 @@ class Life {
         void evaluatePosition(bool** curr, int x, int y);
     public:
         Life(int w = 100, int h = 50, int seed = 1337);
+        Life(const Life& life);
         ~Life();
         vector<pair<float,float>> doTick();
+        Life& operator=(const Life& life);
 };
 
 

@@ -1,6 +1,19 @@
 #include "life.hpp"
 using namespace std;
 
+void Life::init() {
+    board = new bool*[height];
+    buffer = new bool*[height];
+    for (int y = 0; y < height; y++) {
+        board[y] = new bool[width];
+        buffer[y] = new bool[width];
+        for (int x = 0; x < width; x++) {
+            board[y][x] = false;
+            buffer[y][x] = false;
+        }
+    }
+}
+
 Life::Life(int w, int h, int seed) {
     width = w;
     height = h;
@@ -11,8 +24,38 @@ Life::Life(int w, int h, int seed) {
     pass = true;
 }
 
+Life::Life(const Life& life) {
+    width = life.width;
+    height = life.height;
+    init();
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            board[y][x] = life.board[y][x];
+            buffer[y][x] = life.buffer[y][x];
+        }
+    }
+}
+
+Life& Life::operator=(const Life& life) {
+    width = life.width;
+    height = life.height;
+    init();
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            board[y][x] = life.board[y][x];
+            buffer[y][x] = life.buffer[y][x];
+        }
+    }
+    return *this;
+}
+
 Life::~Life() {
-    
+    for (int i = 0; i < height; i++) {
+        delete [] board[i];
+        delete [] buffer[i];
+    }
+    delete [] board;
+    delete [] buffer;
 }
 
 vector<pair<float,float>> Life::doTick() {
@@ -28,18 +71,6 @@ vector<pair<float,float>> Life::doTick() {
     return liveCoords;
 }
 
-void Life::init() {
-    board = new bool*[height];
-    buffer = new bool*[height];
-    for (int y = 0; y < height; y++) {
-        board[y] = new bool[width];
-        buffer[y] = new bool[width];
-        for (int x = 0; x < width; x++) {
-            board[y][x] = false;
-            buffer[y][x] = false;
-        }
-    }
-}
 
 bool Life::isAlive(bool **curr, int x, int y) {
     return curr[y][x];

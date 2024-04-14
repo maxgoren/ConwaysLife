@@ -12,10 +12,14 @@ class App {
         void drawLiveCells();
         void render();
         void handleEvent(sf::Event& event);
+        void saveDisplay();
         int width;
         int height;
         Life life;
+        bool isRecording;
+        int tick;
         sf::RenderWindow* window;
+        sf::RenderTexture* texture;
     public:
         App(int w = 100, int h = 50);
         void start();
